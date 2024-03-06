@@ -34,14 +34,20 @@ import java.util.Random;
 
 import im.zego.effects.ZegoEffects;
 import im.zego.effects.entity.ZegoEffectsBigEyesParam;
+import im.zego.effects.entity.ZegoEffectsBlusherParam;
 import im.zego.effects.entity.ZegoEffectsCheekboneSlimmingParam;
+import im.zego.effects.entity.ZegoEffectsColoredcontactsParam;
 import im.zego.effects.entity.ZegoEffectsDarkCirclesRemovingParam;
+import im.zego.effects.entity.ZegoEffectsEyelashesParam;
 import im.zego.effects.entity.ZegoEffectsEyelinerParam;
 import im.zego.effects.entity.ZegoEffectsEyesBrighteningParam;
+import im.zego.effects.entity.ZegoEffectsEyeshadowParam;
 import im.zego.effects.entity.ZegoEffectsFaceLiftingParam;
 import im.zego.effects.entity.ZegoEffectsFaceShorteningParam;
 import im.zego.effects.entity.ZegoEffectsForeheadShorteningParam;
+import im.zego.effects.entity.ZegoEffectsLipstickParam;
 import im.zego.effects.entity.ZegoEffectsLongChinParam;
+import im.zego.effects.entity.ZegoEffectsMakeupParam;
 import im.zego.effects.entity.ZegoEffectsMandibleSlimmingParam;
 import im.zego.effects.entity.ZegoEffectsNoseLengtheningParam;
 import im.zego.effects.entity.ZegoEffectsNoseNarrowingParam;
@@ -86,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     private String eyeShadowResPath;
     private String eyeLashesResPath;
     private String blusherResPath;
+    private String lipStickResPath;
     private String coloredContactsResPath;
+    private String makeupResPath;
     private boolean isOpen = false;
     private ZegoEffects effects;
     private ZegoEngineProfile profile;
@@ -111,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.fabEffect.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
         binding.fabStart.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
 
+        checkPermission();
         textHintAnim();
         initFab();
         initBottomNav();
         initSubBottomNav();
-        initGetEffectLicenseData();
     }
 
     @Override
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.clEffect.setOnClickListener(v -> closeAiEffect());
 
         binding.fabStart.setOnClickListener(v -> {
-            checkPermission();
+            setParametersToNextPage();
 
         });
     }
@@ -402,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼線": {
                 eyeLineType();
                 adjustmentEyeLine();
+                eyeLineEffect(0, eyeLineResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -412,6 +421,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "眼影": {
+                eyeShadowType();
+                adjustmentEyeShadow();
+                eyeShadowEffect(0, eyeShadowResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("粉霧海");
@@ -422,6 +434,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "眼睫毛": {
+                eyeLashesType();
+                adjustmentEyeLashes();
+                eyeLashesEffect(0, eyeLashesResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -432,7 +447,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "腮紅": {
-
+                blusherType();
+                adjustmentBlusher();
+                blusherEffect(0, blusherResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("微醺");
@@ -443,7 +460,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "口紅": {
-
+                lipStickType();
+                adjustmentLipStick();
+                lipStickEffect(0, lipStickResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("豆沙粉");
@@ -454,7 +473,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "美瞳": {
-
+                coloredContactsType();
+                adjustmentColoredContacts();
+                coloredContactsEffect(0, coloredContactsResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("水光黑");
@@ -465,7 +486,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "風格妝": {
+                binding.tvEffectHint.setVisibility(View.VISIBLE);
+                binding.tvEffectHint.setAlpha(1.0f);
+                binding.tvEffectHint.setText("風格妝無法與\n眼線、眼影、眼睫毛、腮红、口红、美瞳一起套用");
+                binding.tvEffectHint.bringToFront();
+                textHintAnim();
 
+                makeupType();
+                adjustmentMakeup();
+                makeupEffect(0, makeupResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("眼瞼下至妝");
@@ -522,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                             android.Manifest.permission.BLUETOOTH,
                             Manifest.permission.MODIFY_AUDIO_SETTINGS}, 100);
         } else {
-            setParametersToNextPage();
+            initGetEffectLicenseData();
         }
     }
 
@@ -563,6 +592,91 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         AssetsFileUtil.copyFileFromAssets(this, faceModel, path + File.separator + faceModel);
         AssetsFileUtil.copyFileFromAssets(this, segmentationModel, path + File.separator + segmentationModel);
 
+
+        String eyeLineNatural = "AdvancedResources/beautyMakeupEyelinerNatural.bundle";
+        String eyeLineCatEye = "AdvancedResources/beautyMakeupEyelinerCatEye.bundle";
+        String eyeLineNaughty = "AdvancedResources/beautyMakeupEyelinerNaughty.bundle";
+        String eyeLineInnocent = "AdvancedResources/beautyMakeupEyelinerInnocent.bundle";
+        String eyeLineDignified = "AdvancedResources/beautyMakeupEyelinerDignified.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, eyeLineNatural, path + File.separator + eyeLineNatural);
+        AssetsFileUtil.copyFileFromAssets(this, eyeLineCatEye, path + File.separator + eyeLineCatEye);
+        AssetsFileUtil.copyFileFromAssets(this, eyeLineNaughty, path + File.separator + eyeLineNaughty);
+        AssetsFileUtil.copyFileFromAssets(this, eyeLineInnocent, path + File.separator + eyeLineInnocent);
+        AssetsFileUtil.copyFileFromAssets(this, eyeLineDignified, path + File.separator + eyeLineDignified);
+
+        String eyeshadowPinkMist = "AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle";
+        String eyeshadowShimmerPink = "AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle";
+        String eyeshadowTeaBrown = "AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle";
+        String eyeshadowBrightOrange = "AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle";
+        String eyeshadowMochaBrown = "AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, eyeshadowPinkMist, path + File.separator + eyeshadowPinkMist);
+        AssetsFileUtil.copyFileFromAssets(this, eyeshadowShimmerPink, path + File.separator + eyeshadowShimmerPink);
+        AssetsFileUtil.copyFileFromAssets(this, eyeshadowTeaBrown, path + File.separator + eyeshadowTeaBrown);
+        AssetsFileUtil.copyFileFromAssets(this, eyeshadowBrightOrange, path + File.separator + eyeshadowBrightOrange);
+        AssetsFileUtil.copyFileFromAssets(this, eyeshadowMochaBrown, path + File.separator + eyeshadowMochaBrown);
+
+
+        String eyelashesNatural = "AdvancedResources/beautyMakeupEyelashesNatural.bundle";
+        String eyelashesTender = "AdvancedResources/beautyMakeupEyelashesTender.bundle";
+        String eyelashesCurl = "AdvancedResources/beautyMakeupEyelashesCurl.bundle";
+        String eyelashesEverlong = "AdvancedResources/beautyMakeupEyelashesEverlong.bundle";
+        String eyelashesThick = "AdvancedResources/beautyMakeupEyelashesThick.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, eyelashesNatural, path + File.separator + eyelashesNatural);
+        AssetsFileUtil.copyFileFromAssets(this, eyelashesTender, path + File.separator + eyelashesTender);
+        AssetsFileUtil.copyFileFromAssets(this, eyelashesCurl, path + File.separator + eyelashesCurl);
+        AssetsFileUtil.copyFileFromAssets(this, eyelashesEverlong, path + File.separator + eyelashesEverlong);
+        AssetsFileUtil.copyFileFromAssets(this, eyelashesThick, path + File.separator + eyelashesThick);
+
+        String blusherSlightlyDrunk = "AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle";
+        String blusherPeach = "AdvancedResources/beautyMakeupBlusherPeach.bundle";
+        String blusherMilkyOrange = "AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle";
+        String blusherAprocitPink = "AdvancedResources/beautyMakeupBlusherAprocitPink.bundle";
+        String blusherSweetOrange = "AdvancedResources/beautyMakeupBlusherSweetOrange.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, blusherSlightlyDrunk, path + File.separator + blusherSlightlyDrunk);
+        AssetsFileUtil.copyFileFromAssets(this, blusherPeach, path + File.separator + blusherPeach);
+        AssetsFileUtil.copyFileFromAssets(this, blusherMilkyOrange, path + File.separator + blusherMilkyOrange);
+        AssetsFileUtil.copyFileFromAssets(this, blusherAprocitPink, path + File.separator + blusherAprocitPink);
+        AssetsFileUtil.copyFileFromAssets(this, blusherSweetOrange, path + File.separator + blusherSweetOrange);
+
+        String lipstickCameoPink = "AdvancedResources/beautyMakeupLipstickCameoPink.bundle";
+        String lipstickSweetOrange = "AdvancedResources/beautyMakeupLipstickSweetOrange.bundle";
+        String lipstickRustRed = "AdvancedResources/beautyMakeupLipstickRustRed.bundle";
+        String lipstickCoral = "AdvancedResources/beautyMakeupLipstickCoral.bundle";
+        String lipstickRedVelvet = "AdvancedResources/beautyMakeupLipstickRedVelvet.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, lipstickCameoPink, path + File.separator + lipstickCameoPink);
+        AssetsFileUtil.copyFileFromAssets(this, lipstickSweetOrange, path + File.separator + lipstickSweetOrange);
+        AssetsFileUtil.copyFileFromAssets(this, lipstickRustRed, path + File.separator + lipstickRustRed);
+        AssetsFileUtil.copyFileFromAssets(this, lipstickCoral, path + File.separator + lipstickCoral);
+        AssetsFileUtil.copyFileFromAssets(this, lipstickRedVelvet, path + File.separator + lipstickRedVelvet);
+
+        String coloredContactsDarknightBlack = "AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle";
+        String coloredContactsStarryBlue = "AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle";
+        String coloredContactsBrownGreen = "AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle";
+        String coloredContactsLightsBrown = "AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle";
+        String coloredContactsChocolateBrown = "AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, coloredContactsDarknightBlack, path + File.separator + coloredContactsDarknightBlack);
+        AssetsFileUtil.copyFileFromAssets(this, coloredContactsStarryBlue, path + File.separator + coloredContactsStarryBlue);
+        AssetsFileUtil.copyFileFromAssets(this, coloredContactsBrownGreen, path + File.separator + coloredContactsBrownGreen);
+        AssetsFileUtil.copyFileFromAssets(this, coloredContactsLightsBrown, path + File.separator + coloredContactsLightsBrown);
+        AssetsFileUtil.copyFileFromAssets(this, coloredContactsChocolateBrown, path + File.separator + coloredContactsChocolateBrown);
+
+        String styleMakeupInnocentEyes = "AdvancedResources/beautyStyleMakeupInnocentEyes.bundle";
+        String styleMakeupMilkyEyes = "AdvancedResources/beautyStyleMakeupMilkyEyes.bundle";
+        String styleMakeupCutieCool = "AdvancedResources/beautyStyleMakeupCutieCool.bundle";
+        String styleMakeupPureSexy = "AdvancedResources/beautyStyleMakeupPureSexy.bundle";
+        String styleMakeupFlawless = "AdvancedResources/beautyStyleMakeupFlawless.bundle";
+
+        AssetsFileUtil.copyFileFromAssets(this, styleMakeupInnocentEyes, path + File.separator + styleMakeupInnocentEyes);
+        AssetsFileUtil.copyFileFromAssets(this, styleMakeupMilkyEyes, path + File.separator + styleMakeupMilkyEyes);
+        AssetsFileUtil.copyFileFromAssets(this, styleMakeupCutieCool, path + File.separator + styleMakeupCutieCool);
+        AssetsFileUtil.copyFileFromAssets(this, styleMakeupPureSexy, path + File.separator + styleMakeupPureSexy);
+        AssetsFileUtil.copyFileFromAssets(this, styleMakeupFlawless, path + File.separator + styleMakeupFlawless);
 
 
         ArrayList<String> effectList = new ArrayList<>();
@@ -686,7 +800,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                setParametersToNextPage();
+                initGetEffectLicenseData();
             } else {
                 Toast.makeText(this, "not get Permission", Toast.LENGTH_SHORT).show();
             }
@@ -1221,6 +1335,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     }
     private void eyeLineType() {
         String path = this.getCacheDir().getPath();
+
         binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
 
             if (checkedId == binding.rbFirstType.getId()) {
@@ -1247,6 +1362,304 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoEffectsEyelinerParam param = new ZegoEffectsEyelinerParam();
         param.intensity = progress;
         effects.setEyelinerParam(param);
+    }
+
+    private void adjustmentEyeShadow() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                eyeShadowEffect(progress, eyeShadowResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void eyeShadowType() {
+        String path = this.getCacheDir().getPath();
+
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle";
+
+            }
+
+        });
+    }
+    private void eyeShadowEffect(int progress, String fileName) {
+        effects.setEyeshadow(fileName);
+        ZegoEffectsEyeshadowParam param = new ZegoEffectsEyeshadowParam();
+        param.intensity = progress;
+        effects.setEyeshadowParam(param);
+    }
+
+    private void adjustmentEyeLashes() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                eyeLashesEffect(progress, eyeLashesResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void eyeLashesType() {
+        String path = this.getCacheDir().getPath();
+
+
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesNatural.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesTender.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesCurl.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesEverlong.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesThick.bundle";
+
+            }
+
+        });
+    }
+    private void eyeLashesEffect(int progress, String fileName) {
+        effects.setEyelashes(fileName);
+        ZegoEffectsEyelashesParam param = new ZegoEffectsEyelashesParam();
+        param.intensity = progress;
+        effects.setEyelashesParam(param);
+    }
+
+    private void adjustmentBlusher() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                blusherEffect(progress, blusherResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void blusherType() {
+        String path = this.getCacheDir().getPath();
+
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherPeach.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherAprocitPink.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherSweetOrange.bundle";
+
+            }
+
+        });
+    }
+    private void blusherEffect(int progress, String fileName) {
+        effects.setBlusher(fileName);
+        ZegoEffectsBlusherParam param = new ZegoEffectsBlusherParam();
+        param.intensity = progress;
+        effects.setBlusherParam(param);
+    }
+
+    private void adjustmentLipStick() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lipStickEffect(progress, lipStickResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void lipStickType() {
+        String path = this.getCacheDir().getPath();
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickCameoPink.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickSweetOrange.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickRustRed.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickCoral.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickRedVelvet.bundle";
+
+            }
+        });
+    }
+    private void lipStickEffect(int progress, String fileName) {
+        effects.setLipstick(fileName);
+        ZegoEffectsLipstickParam param = new ZegoEffectsLipstickParam();
+        param.intensity = progress;
+        effects.setLipstickParam(param);
+    }
+
+
+    private void adjustmentColoredContacts() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                coloredContactsEffect(progress, coloredContactsResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void coloredContactsType() {
+        String path = this.getCacheDir().getPath();
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle";
+
+            }
+
+        });
+    }
+    private void coloredContactsEffect(int progress, String fileName) {
+        effects.setColoredcontacts(fileName);
+        ZegoEffectsColoredcontactsParam param = new ZegoEffectsColoredcontactsParam();
+        param.intensity = progress;
+        effects.setColoredcontactsParam(param);
+    }
+
+    private void adjustmentMakeup() {
+        binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                makeupEffect(progress, makeupResPath);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void makeupType() {
+        String path = this.getCacheDir().getPath();
+        binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
+
+            if (checkedId == binding.rbFirstType.getId()) {
+                makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupInnocentEyes.bundle";
+
+            } else if (checkedId == binding.rbSecondType.getId()) {
+                makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupMilkyEyes.bundle";
+
+            } else if (checkedId == binding.rbThirdType.getId()) {
+                makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupCutieCool.bundle";
+
+            } else if (checkedId == binding.rbFourthType.getId()) {
+                makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupPureSexy.bundle";
+
+            } else if (checkedId == binding.rbFifthType.getId()) {
+                makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupFlawless.bundle";
+
+            }
+
+        });
+    }
+    private void makeupEffect(int progress, String fileName) {
+        effects.setMakeup(fileName);
+        ZegoEffectsMakeupParam param = new ZegoEffectsMakeupParam();
+        param.intensity = progress;
+        effects.setMakeupParam(param);
     }
 
 
