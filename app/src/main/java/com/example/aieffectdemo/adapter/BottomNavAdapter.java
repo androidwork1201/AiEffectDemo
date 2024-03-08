@@ -69,6 +69,9 @@ public class BottomNavAdapter extends RecyclerView.Adapter<BottomNavAdapter.View
             if (position == 2) {
                 binding.ivOperation.setImageResource(R.drawable.ic_makeups);
             }
+            if (position == 3) {
+                binding.ivOperation.setImageResource(R.drawable.ic_filter);
+            }
 
 
             binding.tvOperation.setText(dataList.get(position));

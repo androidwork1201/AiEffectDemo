@@ -161,7 +161,7 @@
             <integer>3</integer>
             <key>premultiplyAlpha</key>
             <false/>
-            <key>realTextureFileName</key>
+            <key>realTexturefilePath</key>
             <string>star_1.pkm</string>
             <key>size</key>
             <string>{1032,450}</string>
