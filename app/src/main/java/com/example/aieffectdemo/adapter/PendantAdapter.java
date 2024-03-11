@@ -58,10 +58,15 @@ public class PendantAdapter extends RecyclerView.Adapter<PendantAdapter.ViewHold
 
         public void onBind(int position) {
 
-            if (position == dataList.size() - 1) {
-                binding.ivPendant.setImageResource(R.drawable.baseline_cancel_24);
+            if (dataList.get(position).contains("背景")) {
+                binding.ivPendant.setImageResource(R.drawable.baseline_image_24);
+
             } else {
-                binding.ivPendant.setImageResource(R.drawable.baseline_tag_faces_24);
+                if (position == dataList.size() - 1) {
+                    binding.ivPendant.setImageResource(R.drawable.baseline_cancel_24);
+                } else {
+                    binding.ivPendant.setImageResource(R.drawable.baseline_tag_faces_24);
+                }
             }
 
             binding.tvPendant.setText(dataList.get(position));

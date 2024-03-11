@@ -72,6 +72,15 @@
             android:src="@drawable/baseline_tag_faces_24"
             app:maxImageSize="36dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:importantForAccessibility="no"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/baseline_image_24"
+            app:maxImageSize="36dp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSticker"
             android:layout_width="match_parent"

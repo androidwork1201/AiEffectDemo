@@ -90,10 +90,11 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.fabSticker.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
+        binding.fabBg.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
 
         getParameters();
         initFab();
-        initPendant();
+        setPendant();
         binding.ivEnd.setOnClickListener(v -> finish());
     }
 
@@ -106,7 +107,16 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
     private void initFab() {
         binding.fabSticker.setOnClickListener(v -> {
             binding.fabSticker.setVisibility(View.GONE);
+            binding.fabBg.setVisibility(View.GONE);
             binding.rvSticker.setVisibility(View.VISIBLE);
+            setPendant();
+        });
+
+        binding.fabBg.setOnClickListener(v -> {
+            binding.fabBg.setVisibility(View.GONE);
+            binding.fabSticker.setVisibility(View.GONE);
+            binding.rvSticker.setVisibility(View.VISIBLE);
+            setBg();
         });
 
         binding.clEffect.setOnClickListener(v -> {
@@ -114,7 +124,7 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
         });
     }
 
-    private void initPendant() {
+    private void setPendant() {
 
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Animal");
@@ -136,8 +146,26 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
         adapter.setData(arrayList);
     }
 
+    private void setBg() {
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("背景1");
+        arrayList.add("背景2");
+        arrayList.add("背景3");
+        arrayList.add("移除背景效果");
+
+
+        adapter = new PendantAdapter();
+        adapter.setOnItemListener(this);
+        binding.rvSticker.setLayoutManager(new LinearLayoutManager(this));
+        binding.rvSticker.setHasFixedSize(true);
+        binding.rvSticker.setAdapter(adapter);
+        adapter.setData(arrayList);
+    }
+
     private void closePendant() {
         binding.fabSticker.setVisibility(View.VISIBLE);
+        binding.fabBg.setVisibility(View.VISIBLE);
         binding.rvSticker.setVisibility(View.GONE);
         isOpen = !isOpen;
     }
