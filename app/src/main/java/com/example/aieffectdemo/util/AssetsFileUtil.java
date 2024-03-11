@@ -52,43 +52,40 @@ public class AssetsFileUtil {
     }
 
     public static void copyFileFromAssets(Context context, String assetsFilePath, String targetFileFullPath) {
+        File targetFile = new File(targetFileFullPath);
+
+        // 檢查目標文件是否已存在
+        if (targetFile.exists()) {
+            // 文件已存在，根據需求決定是否跳過或執行其他操作
+            return;
+        }
 
         try {
-            if(assetsFilePath.endsWith(File.separator))
-            {
-                assetsFilePath = assetsFilePath.substring(0,assetsFilePath.length()-1);
+            if (assetsFilePath.endsWith(File.separator)) {
+                assetsFilePath = assetsFilePath.substring(0, assetsFilePath.length() - 1);
             }
-            String fileNames[] = context.getAssets().list(assetsFilePath);//获取assets目录下的所有文件及目录名
+            String[] fileNames = context.getAssets().list(assetsFilePath);
             if (fileNames.length > 0) {
-                File file = new File(targetFileFullPath);
-                file.mkdirs();
+                targetFile.mkdirs();
                 for (String fileName : fileNames) {
                     copyFileFromAssets(context, assetsFilePath + File.separator + fileName, targetFileFullPath + File.separator + fileName);
                 }
-            } else {//如果是文件
-
-                File file = new File(targetFileFullPath);
-                file.getParentFile().mkdir();
+            } else {
+                targetFile.getParentFile().mkdirs();
 
                 InputStream is = context.getAssets().open(assetsFilePath);
-
-                FileOutputStream fos = new FileOutputStream(file);
+                FileOutputStream fos = new FileOutputStream(targetFile);
                 byte[] buffer = new byte[1024];
-                int byteCount = 0;
-                while ((byteCount = is.read(buffer)) != -1) {//循环从输入流读取 buffer字节
-                    fos.write(buffer, 0, byteCount);//将读取的输入流写入到输出流
+                int byteCount;
+                while ((byteCount = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, byteCount);
                 }
-                fos.flush();//刷新缓冲区
+                fos.flush();
                 is.close();
                 fos.close();
-
             }
-
         } catch (Exception e) {
             Log.d("Tag", "copyFileFromAssets " + "IOException-" + e.getMessage());
         }
     }
-
-
-
 }

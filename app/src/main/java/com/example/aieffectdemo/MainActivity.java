@@ -23,6 +23,8 @@ import com.example.aieffectdemo.adapter.BottomNavAdapter;
 import com.example.aieffectdemo.adapter.SubBottomNavAdapter;
 import com.example.aieffectdemo.data.AiEffectParametersData;
 import com.example.aieffectdemo.databinding.ActivityMainBinding;
+import com.example.aieffectdemo.util.AiEffectConstant;
+import com.example.aieffectdemo.util.AiEffectManager;
 import com.example.aieffectdemo.util.AssetsFileUtil;
 import com.google.gson.Gson;
 
@@ -77,7 +79,6 @@ import im.zego.zegoexpress.entity.ZegoUser;
 
 public class MainActivity extends AppCompatActivity implements BottomNavAdapter.OnItemListener, SubBottomNavAdapter.OnItemListener {
 
-
     public static final Long APP_ID = 172388699L;
     public static final String APP_SIGN = "88688e6673bb3362bfb16f5d6d3833337c2d638fb6fba5d84c0b1ba201e9784f";
     ActivityMainBinding binding;
@@ -98,11 +99,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     private String makeupResPath;
     private String filterResPath;
     private boolean isOpen = false;
-    private ZegoEffects effects;
     private ZegoEngineProfile profile;
-    private AiEffectParametersData.BeautyData beautyData;
-    private AiEffectParametersData.SmoothData smoothData;
-    private AiEffectParametersData.MakeupsData makeupsData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setContentView(binding.getRoot());
-        beautyData = new AiEffectParametersData.BeautyData();
-        smoothData = new AiEffectParametersData.SmoothData();
-        makeupsData = new AiEffectParametersData.MakeupsData();
 
         userId = generateUserID();
         userName = "user_" + userId;
@@ -213,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             licenseData = license;
 
             if (licenseData != null) {
-                initAiEffect();
+                AiEffectManager.getInstance().initAiEffect(this, licenseData);
                 createEngine();
                 initVideoProcess();
                 startListenerEvent();
@@ -302,42 +296,42 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         switch (itemName) {
             case "美白": {
                 adjustmentFaceWhiten();
-                faceWhiten(0);
+                AiEffectManager.getInstance().faceWhiten(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "磨皮": {
                 adjustmentSmoothFace();
-                smoothFace(0);
+                AiEffectManager.getInstance().smoothFace(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "紅潤": {
                 adjustmentRosy();
-                rosyEffect(0);
+                AiEffectManager.getInstance().rosyEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "銳化": {
                 adjustmentSharpen();
-                sharpenEffect(0);
+                AiEffectManager.getInstance().sharpenEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "去除法令紋": {
                 adjustmentWrinkles();
-                wrinklesEffect(0);
+                AiEffectManager.getInstance().wrinklesEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "去除黑眼圈": {
                 adjustmentDarkCircles();
-                darkCirclesEffect(0);
+                AiEffectManager.getInstance().darkCirclesEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
@@ -345,84 +339,84 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             case "大眼": {
                 adjustmentBigEye();
-                bigEyeEffect(0);
+                AiEffectManager.getInstance().bigEyeEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦臉": {
                 adjustmentFaceLift();
-                faceLiftEffect(0);
+                AiEffectManager.getInstance().faceLiftEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "小嘴": {
                 adjustmentSmailMouth();
-                smailMouthEffect(0);
+                AiEffectManager.getInstance().smailMouthEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "亮眼": {
                 adjustmentEyesBrightening();
-                eyesBrighteningEffect(0);
+                AiEffectManager.getInstance().eyesBrighteningEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦鼻": {
                 adjustmentNoseNarrowing();
-                noseNarrowingEffect(0);
+                AiEffectManager.getInstance().noseNarrowingEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "白牙": {
                 adjustmentTeethWhitening();
-                teethWhiteningEffect(0);
+                AiEffectManager.getInstance().teethWhiteningEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "長下巴": {
                 adjustmentLongChin();
-                longChinEffect(0);
+                AiEffectManager.getInstance().longChinEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "缩小额頭高度": {
                 adjustmentForeheadShortening();
-                foreheadShorteningEffect(0);
+                AiEffectManager.getInstance().foreheadShorteningEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦下額骨": {
                 adjustMandibleSlimming();
-                mandibleSlimmingEffect(0);
+                AiEffectManager.getInstance().mandibleSlimmingEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦颧骨": {
                 adjustmentCheekboneSlimming();
-                cheekboneSlimmingEffect(0);
+                AiEffectManager.getInstance().cheekboneSlimmingEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "小臉": {
                 adjustmentFaceShortening();
-                faceShorteningEffect(0);
+                AiEffectManager.getInstance().faceShorteningEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "長鼻": {
                 adjustmentNoseLengthening();
-                noseLengtheningEffect(0);
+                AiEffectManager.getInstance().noseLengtheningEffect(0);
                 binding.sbAttributesAdjust.setProgress(0);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
@@ -430,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼線": {
                 eyeLineType();
                 adjustmentEyeLine();
-                eyeLineEffect(0, eyeLineResPath);
+                AiEffectManager.getInstance().eyeLineEffect(0, eyeLineResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -443,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼影": {
                 eyeShadowType();
                 adjustmentEyeShadow();
-                eyeShadowEffect(0, eyeShadowResPath);
+                AiEffectManager.getInstance().eyeShadowEffect(0, eyeShadowResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("粉霧海");
@@ -456,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼睫毛": {
                 eyeLashesType();
                 adjustmentEyeLashes();
-                eyeLashesEffect(0, eyeLashesResPath);
+                AiEffectManager.getInstance().eyeLashesEffect(0, eyeLashesResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -469,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "腮紅": {
                 blusherType();
                 adjustmentBlusher();
-                blusherEffect(0, blusherResPath);
+                AiEffectManager.getInstance().blusherEffect(0, blusherResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("微醺");
@@ -482,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "口紅": {
                 lipStickType();
                 adjustmentLipStick();
-                lipStickEffect(0, lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(0, lipStickResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("豆沙粉");
@@ -495,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "美瞳": {
                 coloredContactsType();
                 adjustmentColoredContacts();
-                coloredContactsEffect(0, coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(0, coloredContactsResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("水光黑");
@@ -514,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
                 makeupType();
                 adjustmentMakeup();
-                makeupEffect(0, makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(0, makeupResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("眼瞼下至妝");
@@ -528,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 binding.sbAttributesAdjust.setProgress(100);
                 filterNaturalType();
                 adjustmentFilter();
-                filterEffect(100, filterResPath);
+                AiEffectManager.getInstance().filterEffect(100, filterResPath);
 
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
@@ -543,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 binding.sbAttributesAdjust.setProgress(100);
                 filterGrayType();
                 adjustmentFilter();
-                filterEffect(100, filterResPath);
+                AiEffectManager.getInstance().filterEffect(100, filterResPath);
 
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
@@ -558,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 binding.sbAttributesAdjust.setProgress(100);
                 filterDreamyType();
                 adjustmentFilter();
-                filterEffect(100, filterResPath);
+                AiEffectManager.getInstance().filterEffect(100, filterResPath);
 
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
@@ -613,7 +607,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         return builder.toString();
     }
 
-
     private void checkPermission() {
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||
@@ -639,170 +632,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         bundle.putString("userName", userName);
         bundle.putString("roomId", roomId);
         bundle.putString("licenseData", licenseData);
-        bundle.putString("beautyData", new Gson().toJson(beautyData));
-        bundle.putString("smoothData", new Gson().toJson(smoothData));
-        bundle.putString("makeupsData", new Gson().toJson(makeupsData));
+        bundle.putString("beautyData", new Gson().toJson(AiEffectManager.getInstance().getBeautyData()));
+        bundle.putString("smoothData", new Gson().toJson(AiEffectManager.getInstance().getSmoothData()));
+        bundle.putString("makeupsData", new Gson().toJson(AiEffectManager.getInstance().getMakeupsData()));
 
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        intent.putExtra("bundle",bundle);
+        intent.putExtra("bundle", bundle);
         startActivity(intent);
 
         destroyEngine();
-    }
-
-    private void initAiEffect() {
-        String path = this.getCacheDir().getPath();
-        String faceDetection = "Resource/FaceWhiteningResources.bundle";
-        String pendantDetection = "Resource/PendantResources.bundle";
-        String rosyDetection = "Resource/RosyResources.bundle";
-        String teethWhiteningDetection = "Resource/TeethWhiteningResources";
-        String commonDetection = "Resource/CommonResources.bundle";
-        String stickerBaseDetection = "Resource/StickerBaseResources.bundle";
-        String faceModel = "Model/FaceDetectionModel.model";
-        String segmentationModel = "Model/SegmentationModel.model";
-
-        AssetsFileUtil.copyFileFromAssets(this, faceDetection, path + File.separator + faceDetection);
-        AssetsFileUtil.copyFileFromAssets(this, pendantDetection, path + File.separator + pendantDetection);
-        AssetsFileUtil.copyFileFromAssets(this, rosyDetection, path + File.separator + rosyDetection);
-        AssetsFileUtil.copyFileFromAssets(this, teethWhiteningDetection, path + File.separator + teethWhiteningDetection);
-        AssetsFileUtil.copyFileFromAssets(this, commonDetection, path + File.separator + commonDetection);
-        AssetsFileUtil.copyFileFromAssets(this, stickerBaseDetection, path + File.separator + stickerBaseDetection);
-        AssetsFileUtil.copyFileFromAssets(this, faceModel, path + File.separator + faceModel);
-        AssetsFileUtil.copyFileFromAssets(this, segmentationModel, path + File.separator + segmentationModel);
-
-
-        String eyeLineNatural = "AdvancedResources/beautyMakeupEyelinerNatural.bundle";
-        String eyeLineCatEye = "AdvancedResources/beautyMakeupEyelinerCatEye.bundle";
-        String eyeLineNaughty = "AdvancedResources/beautyMakeupEyelinerNaughty.bundle";
-        String eyeLineInnocent = "AdvancedResources/beautyMakeupEyelinerInnocent.bundle";
-        String eyeLineDignified = "AdvancedResources/beautyMakeupEyelinerDignified.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, eyeLineNatural, path + File.separator + eyeLineNatural);
-        AssetsFileUtil.copyFileFromAssets(this, eyeLineCatEye, path + File.separator + eyeLineCatEye);
-        AssetsFileUtil.copyFileFromAssets(this, eyeLineNaughty, path + File.separator + eyeLineNaughty);
-        AssetsFileUtil.copyFileFromAssets(this, eyeLineInnocent, path + File.separator + eyeLineInnocent);
-        AssetsFileUtil.copyFileFromAssets(this, eyeLineDignified, path + File.separator + eyeLineDignified);
-
-        String eyeshadowPinkMist = "AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle";
-        String eyeshadowShimmerPink = "AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle";
-        String eyeshadowTeaBrown = "AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle";
-        String eyeshadowBrightOrange = "AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle";
-        String eyeshadowMochaBrown = "AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, eyeshadowPinkMist, path + File.separator + eyeshadowPinkMist);
-        AssetsFileUtil.copyFileFromAssets(this, eyeshadowShimmerPink, path + File.separator + eyeshadowShimmerPink);
-        AssetsFileUtil.copyFileFromAssets(this, eyeshadowTeaBrown, path + File.separator + eyeshadowTeaBrown);
-        AssetsFileUtil.copyFileFromAssets(this, eyeshadowBrightOrange, path + File.separator + eyeshadowBrightOrange);
-        AssetsFileUtil.copyFileFromAssets(this, eyeshadowMochaBrown, path + File.separator + eyeshadowMochaBrown);
-
-
-        String eyelashesNatural = "AdvancedResources/beautyMakeupEyelashesNatural.bundle";
-        String eyelashesTender = "AdvancedResources/beautyMakeupEyelashesTender.bundle";
-        String eyelashesCurl = "AdvancedResources/beautyMakeupEyelashesCurl.bundle";
-        String eyelashesEverlong = "AdvancedResources/beautyMakeupEyelashesEverlong.bundle";
-        String eyelashesThick = "AdvancedResources/beautyMakeupEyelashesThick.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, eyelashesNatural, path + File.separator + eyelashesNatural);
-        AssetsFileUtil.copyFileFromAssets(this, eyelashesTender, path + File.separator + eyelashesTender);
-        AssetsFileUtil.copyFileFromAssets(this, eyelashesCurl, path + File.separator + eyelashesCurl);
-        AssetsFileUtil.copyFileFromAssets(this, eyelashesEverlong, path + File.separator + eyelashesEverlong);
-        AssetsFileUtil.copyFileFromAssets(this, eyelashesThick, path + File.separator + eyelashesThick);
-
-        String blusherSlightlyDrunk = "AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle";
-        String blusherPeach = "AdvancedResources/beautyMakeupBlusherPeach.bundle";
-        String blusherMilkyOrange = "AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle";
-        String blusherAprocitPink = "AdvancedResources/beautyMakeupBlusherAprocitPink.bundle";
-        String blusherSweetOrange = "AdvancedResources/beautyMakeupBlusherSweetOrange.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, blusherSlightlyDrunk, path + File.separator + blusherSlightlyDrunk);
-        AssetsFileUtil.copyFileFromAssets(this, blusherPeach, path + File.separator + blusherPeach);
-        AssetsFileUtil.copyFileFromAssets(this, blusherMilkyOrange, path + File.separator + blusherMilkyOrange);
-        AssetsFileUtil.copyFileFromAssets(this, blusherAprocitPink, path + File.separator + blusherAprocitPink);
-        AssetsFileUtil.copyFileFromAssets(this, blusherSweetOrange, path + File.separator + blusherSweetOrange);
-
-        String lipstickCameoPink = "AdvancedResources/beautyMakeupLipstickCameoPink.bundle";
-        String lipstickSweetOrange = "AdvancedResources/beautyMakeupLipstickSweetOrange.bundle";
-        String lipstickRustRed = "AdvancedResources/beautyMakeupLipstickRustRed.bundle";
-        String lipstickCoral = "AdvancedResources/beautyMakeupLipstickCoral.bundle";
-        String lipstickRedVelvet = "AdvancedResources/beautyMakeupLipstickRedVelvet.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, lipstickCameoPink, path + File.separator + lipstickCameoPink);
-        AssetsFileUtil.copyFileFromAssets(this, lipstickSweetOrange, path + File.separator + lipstickSweetOrange);
-        AssetsFileUtil.copyFileFromAssets(this, lipstickRustRed, path + File.separator + lipstickRustRed);
-        AssetsFileUtil.copyFileFromAssets(this, lipstickCoral, path + File.separator + lipstickCoral);
-        AssetsFileUtil.copyFileFromAssets(this, lipstickRedVelvet, path + File.separator + lipstickRedVelvet);
-
-        String coloredContactsDarknightBlack = "AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle";
-        String coloredContactsStarryBlue = "AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle";
-        String coloredContactsBrownGreen = "AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle";
-        String coloredContactsLightsBrown = "AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle";
-        String coloredContactsChocolateBrown = "AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, coloredContactsDarknightBlack, path + File.separator + coloredContactsDarknightBlack);
-        AssetsFileUtil.copyFileFromAssets(this, coloredContactsStarryBlue, path + File.separator + coloredContactsStarryBlue);
-        AssetsFileUtil.copyFileFromAssets(this, coloredContactsBrownGreen, path + File.separator + coloredContactsBrownGreen);
-        AssetsFileUtil.copyFileFromAssets(this, coloredContactsLightsBrown, path + File.separator + coloredContactsLightsBrown);
-        AssetsFileUtil.copyFileFromAssets(this, coloredContactsChocolateBrown, path + File.separator + coloredContactsChocolateBrown);
-
-        String styleMakeupInnocentEyes = "AdvancedResources/beautyStyleMakeupInnocentEyes.bundle";
-        String styleMakeupMilkyEyes = "AdvancedResources/beautyStyleMakeupMilkyEyes.bundle";
-        String styleMakeupCutieCool = "AdvancedResources/beautyStyleMakeupCutieCool.bundle";
-        String styleMakeupPureSexy = "AdvancedResources/beautyStyleMakeupPureSexy.bundle";
-        String styleMakeupFlawless = "AdvancedResources/beautyStyleMakeupFlawless.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, styleMakeupInnocentEyes, path + File.separator + styleMakeupInnocentEyes);
-        AssetsFileUtil.copyFileFromAssets(this, styleMakeupMilkyEyes, path + File.separator + styleMakeupMilkyEyes);
-        AssetsFileUtil.copyFileFromAssets(this, styleMakeupCutieCool, path + File.separator + styleMakeupCutieCool);
-        AssetsFileUtil.copyFileFromAssets(this, styleMakeupPureSexy, path + File.separator + styleMakeupPureSexy);
-        AssetsFileUtil.copyFileFromAssets(this, styleMakeupFlawless, path + File.separator + styleMakeupFlawless);
-
-        String filterDreamyCozily = "AdvancedResources/filterDreamyCozily.bundle";
-        String filterDreamySunset = "AdvancedResources/filterDreamySunset.bundle";
-        String filterDreamySweet = "AdvancedResources/filterDreamySweet.bundle";
-        String filterGrayFilmlike = "AdvancedResources/filterGrayFilmlike.bundle";
-        String filterGrayMonet = "AdvancedResources/filterGrayMonet.bundle";
-        String filterGrayNight = "AdvancedResources/filterGrayNight.bundle";
-        String filterNaturalAutumn = "AdvancedResources/filterNaturalAutumn.bundle";
-        String filterNaturalBrighten = "AdvancedResources/filterNaturalBrighten.bundle";
-        String filterNaturalCreamy = "AdvancedResources/filterNaturalCreamy.bundle";
-        String filterNaturalFresh = "AdvancedResources/filterNaturalFresh.bundle";
-
-        AssetsFileUtil.copyFileFromAssets(this, filterDreamyCozily, path + File.separator + filterDreamyCozily);
-        AssetsFileUtil.copyFileFromAssets(this, filterDreamySunset, path + File.separator + filterDreamySunset);
-        AssetsFileUtil.copyFileFromAssets(this, filterDreamySweet, path + File.separator + filterDreamySweet);
-        AssetsFileUtil.copyFileFromAssets(this, filterGrayFilmlike, path + File.separator + filterGrayFilmlike);
-        AssetsFileUtil.copyFileFromAssets(this, filterGrayMonet, path + File.separator + filterGrayMonet);
-        AssetsFileUtil.copyFileFromAssets(this, filterGrayNight, path + File.separator + filterGrayNight);
-        AssetsFileUtil.copyFileFromAssets(this, filterNaturalAutumn, path + File.separator + filterNaturalAutumn);
-        AssetsFileUtil.copyFileFromAssets(this, filterNaturalBrighten, path + File.separator + filterNaturalBrighten);
-        AssetsFileUtil.copyFileFromAssets(this, filterNaturalCreamy, path + File.separator + filterNaturalCreamy);
-        AssetsFileUtil.copyFileFromAssets(this, filterNaturalFresh, path + File.separator + filterNaturalFresh);
-
-
-        ArrayList<String> effectList = new ArrayList<>();
-        effectList.add(path + File.separator + faceDetection);
-        effectList.add(path + File.separator + pendantDetection);
-        effectList.add(path + File.separator + rosyDetection);
-        effectList.add(path + File.separator + teethWhiteningDetection);
-        effectList.add(path + File.separator + commonDetection);
-        effectList.add(path + File.separator + stickerBaseDetection);
-        effectList.add(path + File.separator + faceModel);
-        effectList.add(path + File.separator + segmentationModel);
-
-        ZegoEffects.setResources(effectList);
-
-        effects = ZegoEffects.create(licenseData, this.getApplication());
-        effects.enableFaceDetection(true);
-
-
-        makeupsData.setEyelinerRes(path + File.separator + eyeLineNatural);
-        makeupsData.setEyeShadowRes(path + File.separator + eyeshadowPinkMist);
-        makeupsData.setEyelashesRes(path + File.separator + eyelashesNatural);
-        makeupsData.setBlushRes(path + File.separator + blusherSlightlyDrunk);
-        makeupsData.setLipstickRes(path + File.separator + lipstickCameoPink);
-        makeupsData.setLensesRes(path + File.separator + coloredContactsDarknightBlack);
-        makeupsData.setStyleMakeupRes(path + File.separator + styleMakeupInnocentEyes);
-        makeupsData.setFilterRes(path + File.separator + filterDreamyCozily);
     }
 
     private void startListenerEvent() {
@@ -827,6 +665,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         profile.application = this.getApplication();
         ZegoExpressEngine.createEngine(profile, null);
     }
+
     private void destroyEngine() {
         ZegoExpressEngine.destroyEngine(null);
     }
@@ -843,7 +682,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         });
     }
 
-
     private void initVideoProcess() {
         ZegoCustomVideoProcessConfig config = new ZegoCustomVideoProcessConfig();
         config.bufferType = ZegoVideoBufferType.GL_TEXTURE_2D;
@@ -853,7 +691,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             @Override
             public void onStart(ZegoPublishChannel channel) {
                 super.onStart(channel);
-                effects.initEnv(1280, 720);
+                AiEffectManager.getInstance().getEffects().initEnv(1280, 720);
 
             }
 
@@ -869,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 param.width = width;
                 param.height = height;
 
-                int processedTextureID = effects.processTexture(textureID, param);
+                int processedTextureID = AiEffectManager.getInstance().getEffects().processTexture(textureID, param);
                 ZegoExpressEngine.getEngine().sendCustomVideoProcessedTextureData(
                         processedTextureID,
                         width,
@@ -878,7 +716,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             }
         });
     }
-
 
     //推流
     private void startPublishStream() {
@@ -904,7 +741,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoExpressEngine.getEngine().stopPlayingStream(streamId);
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -918,157 +754,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     }
 
 
-    //美白
-    private void faceWhiten(int progress) {
-        effects.enableWhiten(true);
-        ZegoEffectsWhitenParam param = new ZegoEffectsWhitenParam();
-        param.intensity = progress;
-        effects.setWhitenParam(param);
-    }
-    //平滑肌膚
-    private void smoothFace(int progress) {
-        effects.enableSmooth(true);
-        ZegoEffectsSmoothParam param = new ZegoEffectsSmoothParam();
-        param.intensity = progress;
-        effects.setSmoothParam(param);
-    }
-
-    //腮紅
-    private void rosyEffect(int progress) {
-        effects.enableRosy(true);
-        ZegoEffectsRosyParam param = new ZegoEffectsRosyParam();
-        param.intensity = progress;
-        effects.setRosyParam(param);
-    }
-
-    //影像銳化
-    private void sharpenEffect(int progress) {
-        effects.enableSharpen(true);
-        ZegoEffectsSharpenParam param = new ZegoEffectsSharpenParam();
-        param.intensity = progress;
-        effects.setSharpenParam(param);
-    }
-
-    //去除法令纹
-    private void wrinklesEffect(int progress) {
-        effects.enableWrinklesRemoving(true);
-        ZegoEffectsWrinklesRemovingParam param = new ZegoEffectsWrinklesRemovingParam();
-        param.intensity = progress;
-        effects.setWrinklesRemovingParam(param);
-    }
-
-    //去除黑眼圈
-    private void darkCirclesEffect(int progress) {
-        effects.enableDarkCirclesRemoving(true);
-        ZegoEffectsDarkCirclesRemovingParam param = new ZegoEffectsDarkCirclesRemovingParam();
-        param.intensity = progress;
-        effects.setDarkCirclesRemovingParam(param);
-    }
-
-    //大眼
-    private void bigEyeEffect(int progress) {
-        effects.enableBigEyes(true);
-        ZegoEffectsBigEyesParam param = new ZegoEffectsBigEyesParam();
-        param.intensity = progress;
-        effects.setBigEyesParam(param);
-    }
-
-    //瘦臉
-    private void faceLiftEffect(int progress) {
-        effects.enableFaceLifting(true);
-        ZegoEffectsFaceLiftingParam param = new ZegoEffectsFaceLiftingParam();
-        param.intensity = progress;
-        effects.setFaceLiftingParam(param);
-    }
-
-    //小嘴
-    private void smailMouthEffect(int progress) {
-        effects.enableSmallMouth(true);
-        ZegoEffectsSmallMouthParam param = new ZegoEffectsSmallMouthParam();
-        param.intensity = progress;
-        effects.setSmallMouthParam(param);
-    }
-
-    //亮眼
-    private void eyesBrighteningEffect(int progress) {
-        effects.enableEyesBrightening(true);
-        ZegoEffectsEyesBrighteningParam param = new ZegoEffectsEyesBrighteningParam();
-        param.intensity = progress;
-        effects.setEyesBrighteningParam(param);
-    }
-
-    //瘦鼻
-    private void noseNarrowingEffect(int progress) {
-        effects.enableNoseNarrowing(true);
-        ZegoEffectsNoseNarrowingParam param = new ZegoEffectsNoseNarrowingParam();
-        param.intensity = progress;
-        effects.setNoseNarrowingParam(param);
-    }
-
-    //白牙
-    private void teethWhiteningEffect(int progress) {
-        effects.enableTeethWhitening(true);
-        ZegoEffectsTeethWhiteningParam param = new ZegoEffectsTeethWhiteningParam();
-        param.intensity = progress;
-        effects.setTeethWhiteningParam(param);
-    }
-
-    //長下巴
-    private void longChinEffect(int progress) {
-        effects.enableLongChin(true);
-        ZegoEffectsLongChinParam param = new ZegoEffectsLongChinParam();
-        param.intensity = progress;
-        effects.setLongChinParam(param);
-    }
-
-    //縮小額頭高度
-    private void foreheadShorteningEffect(int progress) {
-        effects.enableForeheadShortening(true);
-        ZegoEffectsForeheadShorteningParam param = new ZegoEffectsForeheadShorteningParam();
-        param.intensity = progress;
-        effects.setForeheadShorteningParam(param);
-    }
-
-    //瘦下額骨
-    private void mandibleSlimmingEffect(int progress) {
-        effects.enableMandibleSlimming(true);
-        ZegoEffectsMandibleSlimmingParam param = new ZegoEffectsMandibleSlimmingParam();
-        param.intensity = progress;
-        effects.setMandibleSlimmingParam(param);
-    }
-
-    //瘦顱骨
-    private void cheekboneSlimmingEffect(int progress) {
-        effects.enableCheekboneSlimming(true);
-        ZegoEffectsCheekboneSlimmingParam param = new ZegoEffectsCheekboneSlimmingParam();
-        param.intensity = progress;
-        effects.setCheekboneSlimmingParam(param);
-    }
-
-    //小臉
-    private void faceShorteningEffect(int progress) {
-        effects.enableFaceShortening(true);
-        ZegoEffectsFaceShorteningParam param = new ZegoEffectsFaceShorteningParam();
-        param.intensity = progress;
-        effects.setFaceShorteningParam(param);
-    }
-
-    //长鼻
-    private void noseLengtheningEffect(int progress) {
-        effects.enableNoseLengthening(true);
-        ZegoEffectsNoseLengtheningParam param = new ZegoEffectsNoseLengtheningParam();
-        param.intensity = progress;
-        effects.setNoseLengtheningParam(param);
-    }
-
 
     //----------------------------------------------美顏-------------------------------------------------
     private void adjustmentFaceWhiten() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                faceWhiten(progress);
-                beautyData.setWhiten(progress);
+                AiEffectManager.getInstance().faceWhiten(progress);
+                AiEffectManager.getInstance().getBeautyData().setWhiten(progress);
             }
 
             @Override
@@ -1087,8 +780,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                smoothFace(progress);
-                beautyData.setSmooth(progress);
+                AiEffectManager.getInstance().smoothFace(progress);
+                AiEffectManager.getInstance().getBeautyData().setSmooth(progress);
             }
 
             @Override
@@ -1107,8 +800,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                rosyEffect(progress);
-                beautyData.setRosy(progress);
+                AiEffectManager.getInstance().rosyEffect(progress);
+                AiEffectManager.getInstance().getBeautyData().setRosy(progress);
             }
 
             @Override
@@ -1127,8 +820,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sharpenEffect(progress);
-                beautyData.setSharpen(progress);
+                AiEffectManager.getInstance().sharpenEffect(progress);
+                AiEffectManager.getInstance().getBeautyData().setSharpen(progress);
             }
 
             @Override
@@ -1147,8 +840,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                wrinklesEffect(progress);
-                beautyData.setWrinkles(progress);
+                AiEffectManager.getInstance().wrinklesEffect(progress);
+                AiEffectManager.getInstance().getBeautyData().setWrinkles(progress);
             }
 
             @Override
@@ -1167,8 +860,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                darkCirclesEffect(progress);
-                beautyData.setDarkCircles(progress);
+                AiEffectManager.getInstance().darkCirclesEffect(progress);
+                AiEffectManager.getInstance().getBeautyData().setDarkCircles(progress);
             }
 
             @Override
@@ -1182,13 +875,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             }
         });
     }
+
     //----------------------------------------------美型-------------------------------------------------
     private void adjustmentBigEye() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                bigEyeEffect(progress);
-                smoothData.setBigEyes(progress);
+                AiEffectManager.getInstance().bigEyeEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setBigEyes(progress);
             }
 
             @Override
@@ -1207,8 +901,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                faceLiftEffect(progress);
-                smoothData.setFaceLifting(progress);
+                AiEffectManager.getInstance().faceLiftEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setFaceLifting(progress);
             }
 
             @Override
@@ -1227,8 +921,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                smailMouthEffect(progress);
-                smoothData.setSmallMouth(progress);
+                AiEffectManager.getInstance().smailMouthEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setSmallMouth(progress);
             }
 
             @Override
@@ -1247,8 +941,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                eyesBrighteningEffect(progress);
-                smoothData.setEyesBrightening(progress);
+                AiEffectManager.getInstance().eyesBrighteningEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setEyesBrightening(progress);
             }
 
             @Override
@@ -1267,8 +961,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                noseNarrowingEffect(progress);
-                smoothData.setNoseNarrowing(progress);
+                AiEffectManager.getInstance().noseNarrowingEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setNoseNarrowing(progress);
             }
 
             @Override
@@ -1287,8 +981,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                teethWhiteningEffect(progress);
-                smoothData.setTeethWhitening(progress);
+                AiEffectManager.getInstance().teethWhiteningEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setTeethWhitening(progress);
             }
 
             @Override
@@ -1307,8 +1001,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                longChinEffect(progress);
-                smoothData.setLongChin(progress);
+                AiEffectManager.getInstance().longChinEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setLongChin(progress);
             }
 
             @Override
@@ -1327,8 +1021,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                foreheadShorteningEffect(progress);
-                smoothData.setForeheadShortening(progress);
+                AiEffectManager.getInstance().foreheadShorteningEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setForeheadShortening(progress);
             }
 
             @Override
@@ -1347,8 +1041,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mandibleSlimmingEffect(progress);
-                smoothData.setMandibleSlimming(progress);
+                AiEffectManager.getInstance().mandibleSlimmingEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setMandibleSlimming(progress);
             }
 
             @Override
@@ -1367,8 +1061,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                cheekboneSlimmingEffect(progress);
-                smoothData.setCheekboneSlimming(progress);
+                AiEffectManager.getInstance().cheekboneSlimmingEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setCheekboneSlimming(progress);
             }
 
             @Override
@@ -1387,8 +1081,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                faceShorteningEffect(progress);
-                smoothData.setFaceShortening(progress);
+                AiEffectManager.getInstance().faceShorteningEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setFaceShortening(progress);
             }
 
             @Override
@@ -1407,8 +1101,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                noseLengtheningEffect(progress);
-                smoothData.setNoseLengthening(progress);
+                AiEffectManager.getInstance().noseLengtheningEffect(progress);
+                AiEffectManager.getInstance().getSmoothData().setNoseLengthening(progress);
             }
 
             @Override
@@ -1429,8 +1123,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                eyeLineEffect(progress, eyeLineResPath);
-                makeupsData.setEyeliner(progress);
+                AiEffectManager.getInstance().eyeLineEffect(progress, eyeLineResPath);
+                AiEffectManager.getInstance().getMakeupsData().setEyeliner(progress);
             }
 
             @Override
@@ -1444,6 +1138,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             }
         });
     }
+
     private void eyeLineType() {
         String path = this.getCacheDir().getPath();
 
@@ -1451,45 +1146,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 eyeLineResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelinerNatural.bundle";
-                eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
-
+                AiEffectManager.getInstance().eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 eyeLineResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelinerCatEye.bundle";
-                eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
-
+                AiEffectManager.getInstance().eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 eyeLineResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelinerNaughty.bundle";
-                eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
-
+                AiEffectManager.getInstance().eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 eyeLineResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelinerInnocent.bundle";
-                eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
-
+                AiEffectManager.getInstance().eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 eyeLineResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelinerDignified.bundle";
-                eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
+                AiEffectManager.getInstance().eyeLineEffect(binding.sbAttributesAdjust.getProgress(), eyeLineResPath);
 
             }
-            makeupsData.setEyelinerRes(eyeLineResPath);
+            AiEffectManager.getInstance().getMakeupsData().setEyelinerRes(eyeLineResPath);
         });
-    }
-    private void eyeLineEffect(int progress, String filePath) {
-        effects.setEyeliner(filePath);
-        ZegoEffectsEyelinerParam param = new ZegoEffectsEyelinerParam();
-        param.intensity = progress;
-        effects.setEyelinerParam(param);
     }
 
     private void adjustmentEyeShadow() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                eyeShadowEffect(progress, eyeShadowResPath);
-                makeupsData.setEyeShadow(progress);
+                AiEffectManager.getInstance().eyeShadowEffect(progress, eyeShadowResPath);
+                AiEffectManager.getInstance().getMakeupsData().setEyeShadow(progress);
             }
 
             @Override
@@ -1511,46 +1196,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowPinkMist.bundle";
-                eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
-
+                AiEffectManager.getInstance().eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowShimmerPink.bundle";
-                eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
-
+                AiEffectManager.getInstance().eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowTeaBrown.bundle";
-                eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
-
+                AiEffectManager.getInstance().eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowBrightOrange.bundle";
-                eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
-
+                AiEffectManager.getInstance().eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 eyeShadowResPath = path + File.separator + "AdvancedResources/beautyMakeupEyeshadowMochaBrown.bundle";
-                eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
-
+                AiEffectManager.getInstance().eyeShadowEffect(binding.sbAttributesAdjust.getProgress(), eyeShadowResPath);
 
             }
-            makeupsData.setEyeShadowRes(eyeShadowResPath);
+            AiEffectManager.getInstance().getMakeupsData().setEyeShadowRes(eyeShadowResPath);
         });
-    }
-    private void eyeShadowEffect(int progress, String fileName) {
-        effects.setEyeshadow(fileName);
-        ZegoEffectsEyeshadowParam param = new ZegoEffectsEyeshadowParam();
-        param.intensity = progress;
-        effects.setEyeshadowParam(param);
     }
 
     private void adjustmentEyeLashes() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                eyeLashesEffect(progress, eyeLashesResPath);
-                makeupsData.setEyelashes(progress);
+                AiEffectManager.getInstance().eyeLashesEffect(progress, eyeLashesResPath);
+                AiEffectManager.getInstance().getMakeupsData().setEyelashes(progress);
             }
 
             @Override
@@ -1568,51 +1242,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     private void eyeLashesType() {
         String path = this.getCacheDir().getPath();
 
-
         binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
 
             if (checkedId == binding.rbFirstType.getId()) {
                 eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesNatural.bundle";
-                eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
-
+                AiEffectManager.getInstance().eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesTender.bundle";
-                eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
-
+                AiEffectManager.getInstance().eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesCurl.bundle";
-                eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
-
+                AiEffectManager.getInstance().eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesEverlong.bundle";
-                eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
-
+                AiEffectManager.getInstance().eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 eyeLashesResPath = path + File.separator + "AdvancedResources/beautyMakeupEyelashesThick.bundle";
-                eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
-
+                AiEffectManager.getInstance().eyeLashesEffect(binding.sbAttributesAdjust.getProgress(), eyeLashesResPath);
 
             }
-            makeupsData.setEyelashesRes(eyeLashesResPath);
+            AiEffectManager.getInstance().getMakeupsData().setEyelashesRes(eyeLashesResPath);
         });
-    }
-    private void eyeLashesEffect(int progress, String fileName) {
-        effects.setEyelashes(fileName);
-        ZegoEffectsEyelashesParam param = new ZegoEffectsEyelashesParam();
-        param.intensity = progress;
-        effects.setEyelashesParam(param);
     }
 
     private void adjustmentBlusher() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                blusherEffect(progress, blusherResPath);
-                makeupsData.setBlush(progress);
+                AiEffectManager.getInstance().blusherEffect(progress, blusherResPath);
+                AiEffectManager.getInstance().getMakeupsData().setBlush(progress);
             }
 
             @Override
@@ -1634,44 +1296,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherSlightlyDrunk.bundle";
-                blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
-
+                AiEffectManager.getInstance().blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherPeach.bundle";
-                blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
+                AiEffectManager.getInstance().blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherMilkyOrange.bundle";
-                blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
-
+                AiEffectManager.getInstance().blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherAprocitPink.bundle";
-                blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
-
+                AiEffectManager.getInstance().blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 blusherResPath = path + File.separator + "AdvancedResources/beautyMakeupBlusherSweetOrange.bundle";
-                blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
+                AiEffectManager.getInstance().blusherEffect(binding.sbAttributesAdjust.getProgress(), blusherResPath);
 
             }
-            makeupsData.setBlushRes(blusherResPath);
+            AiEffectManager.getInstance().getMakeupsData().setBlushRes(blusherResPath);
         });
-    }
-    private void blusherEffect(int progress, String fileName) {
-        effects.setBlusher(fileName);
-        ZegoEffectsBlusherParam param = new ZegoEffectsBlusherParam();
-        param.intensity = progress;
-        effects.setBlusherParam(param);
     }
 
     private void adjustmentLipStick() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                lipStickEffect(progress, lipStickResPath);
-                makeupsData.setLipstick(progress);
+                AiEffectManager.getInstance().lipStickEffect(progress, lipStickResPath);
+                AiEffectManager.getInstance().getMakeupsData().setLipstick(progress);
             }
 
             @Override
@@ -1692,42 +1345,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickCameoPink.bundle";
-                lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickSweetOrange.bundle";
-                lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickRustRed.bundle";
-                lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickCoral.bundle";
-                lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 lipStickResPath = path + File.separator + "AdvancedResources/beautyMakeupLipstickRedVelvet.bundle";
-                lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(binding.sbAttributesAdjust.getProgress(), lipStickResPath);
 
             }
-            makeupsData.setLipstickRes(lipStickResPath);
+            AiEffectManager.getInstance().getMakeupsData().setLipstickRes(lipStickResPath);
         });
     }
-    private void lipStickEffect(int progress, String fileName) {
-        effects.setLipstick(fileName);
-        ZegoEffectsLipstickParam param = new ZegoEffectsLipstickParam();
-        param.intensity = progress;
-        effects.setLipstickParam(param);
-    }
-
 
     private void adjustmentColoredContacts() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                coloredContactsEffect(progress, coloredContactsResPath);
-                makeupsData.setLenses(progress);
+                AiEffectManager.getInstance().coloredContactsEffect(progress, coloredContactsResPath);
+                AiEffectManager.getInstance().getMakeupsData().setLenses(progress);
             }
 
             @Override
@@ -1748,41 +1394,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsDarknightBlack.bundle";
-                coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsStarryBlue.bundle";
-                coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsBrownGreen.bundle";
-                coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsLightsBrown.bundle";
-                coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 coloredContactsResPath = path + File.separator + "AdvancedResources/beautyMakeupColoredContactsChocolateBrown.bundle";
-                coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(binding.sbAttributesAdjust.getProgress(), coloredContactsResPath);
 
             }
-            makeupsData.setLensesRes(coloredContactsResPath);
+            AiEffectManager.getInstance().getMakeupsData().setLensesRes(coloredContactsResPath);
         });
-    }
-    private void coloredContactsEffect(int progress, String fileName) {
-        effects.setColoredcontacts(fileName);
-        ZegoEffectsColoredcontactsParam param = new ZegoEffectsColoredcontactsParam();
-        param.intensity = progress;
-        effects.setColoredcontactsParam(param);
     }
 
     private void adjustmentMakeup() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                makeupEffect(progress, makeupResPath);
-                makeupsData.setStyleMakeup(progress);
+                AiEffectManager.getInstance().makeupEffect(progress, makeupResPath);
+                AiEffectManager.getInstance().getMakeupsData().setStyleMakeup(progress);
             }
 
             @Override
@@ -1803,43 +1443,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupInnocentEyes.bundle";
-                makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupMilkyEyes.bundle";
-                makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupCutieCool.bundle";
-                makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupPureSexy.bundle";
-                makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
 
             } else if (checkedId == binding.rbFifthType.getId()) {
                 makeupResPath = path + File.separator + "AdvancedResources/beautyStyleMakeupFlawless.bundle";
-                makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(binding.sbAttributesAdjust.getProgress(), makeupResPath);
 
             }
-            makeupsData.setStyleMakeupRes(makeupResPath);
+            AiEffectManager.getInstance().getMakeupsData().setStyleMakeupRes(makeupResPath);
         });
-    }
-
-
-    private void makeupEffect(int progress, String fileName) {
-        effects.setMakeup(fileName);
-        ZegoEffectsMakeupParam param = new ZegoEffectsMakeupParam();
-        param.intensity = progress;
-        effects.setMakeupParam(param);
     }
 
     private void adjustmentFilter() {
         binding.sbAttributesAdjust.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                filterEffect(progress, filterResPath);
-                makeupsData.setFilter(progress);
+                AiEffectManager.getInstance().filterEffect(progress, filterResPath);
+                AiEffectManager.getInstance().getMakeupsData().setFilter(progress);
             }
 
             @Override
@@ -1854,29 +1486,28 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         });
     }
 
-
     private void filterNaturalType() {
         String path = this.getCacheDir().getPath();
         binding.rgMakeup.setOnCheckedChangeListener((group, checkedId) -> {
 
             if (checkedId == binding.rbFirstType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterNaturalCreamy.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterNaturalBrighten.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterNaturalFresh.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbFourthType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterNaturalAutumn.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             }
-            makeupsData.setFilterRes(filterResPath);
+            AiEffectManager.getInstance().getMakeupsData().setFilterRes(filterResPath);
         });
     }
 
@@ -1886,18 +1517,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterGrayMonet.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterGrayNight.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterGrayFilmlike.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             }
-            makeupsData.setFilterRes(filterResPath);
+            AiEffectManager.getInstance().getMakeupsData().setFilterRes(filterResPath);
         });
     }
 
@@ -1907,25 +1538,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (checkedId == binding.rbFirstType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterDreamySunset.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbSecondType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterDreamyCozily.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             } else if (checkedId == binding.rbThirdType.getId()) {
                 filterResPath = path + File.separator + "AdvancedResources/filterDreamySweet.bundle";
-                filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
+                AiEffectManager.getInstance().filterEffect(binding.sbAttributesAdjust.getProgress(), filterResPath);
 
             }
-            makeupsData.setFilterRes(filterResPath);
+            AiEffectManager.getInstance().getMakeupsData().setFilterRes(filterResPath);
         });
-    }
-
-    private void filterEffect(int progress, String fileName) {
-        effects.setFilter(fileName);
-        ZegoEffectsFilterParam param = new ZegoEffectsFilterParam();
-        param.intensity = progress;
-        effects.setFilterParam(param);
     }
 }
