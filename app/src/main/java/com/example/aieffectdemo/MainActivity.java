@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     private String makeupResPath;
     private String filterResPath;
     private boolean isOpen = false;
+    private boolean isBackAgain = false;
+
     private ZegoEngineProfile profile;
 
     @Override
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
         userId = generateUserID();
         userName = "user_" + userId;
-        roomId = "1";
+        roomId = "3526";
 
         binding.fabEffect.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
         binding.fabStart.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     @Override
     protected void onStart() {
         super.onStart();
+        if (isBackAgain) finish();
     }
 
     @Override
@@ -638,7 +641,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
         intent.putExtra("bundle", bundle);
-        startActivity(intent);
+
+        new Handler().postDelayed((Runnable) () -> {
+            startActivity(intent);
+            isBackAgain = true;
+        }, 500);
 
         destroyEngine();
     }
@@ -692,7 +699,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             public void onStart(ZegoPublishChannel channel) {
                 super.onStart(channel);
                 AiEffectManager.getInstance().getEffects().initEnv(1280, 720);
-
             }
 
             @Override

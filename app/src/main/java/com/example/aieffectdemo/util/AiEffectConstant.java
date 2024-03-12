@@ -80,4 +80,21 @@ public class AiEffectConstant {
         public final static String naturalCreamy = "AdvancedResources/filterNaturalCreamy.bundle";
         public final static String naturalFresh = "AdvancedResources/filterNaturalFresh.bundle";
     }
+    public class Pendant {
+        public static final String pendantAnimal = "AdvancedResources/stickerAnimal.bundle";
+        public static final String pendantCat = "AdvancedResources/stickerCat.bundle";
+        public static final String pendantClawMachine = "AdvancedResources/stickerClawMachine.bundle";
+        public static final String pendantClown = "AdvancedResources/stickerClown.bundle";
+        public static final String pendantCoolGirl = "AdvancedResources/stickerCoolGirl.bundle";
+        public static final String pendantDeer = "AdvancedResources/stickerDeer.bundle";
+        public static final String pendantDive = "AdvancedResources/stickerDive.bundle";
+        public static final String pendantSailorMoon = "AdvancedResources/stickerSailorMoon.bundle";
+        public static final String pendantWatermelon = "AdvancedResources/stickerWatermelon.bundle";
+    }
+
+    public class BgImage{
+        public static final String bgImage_1 = "BgImage/imagebg1.png";
+        public static final String bgImage_2 = "BgImage/imagebg2.jpg";
+        public static final String bgImage_3 = "BgImage/imagebg3.jpg";
+    }
 }

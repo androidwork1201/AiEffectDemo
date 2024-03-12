@@ -34,6 +34,7 @@ import im.zego.effects.entity.ZegoEffectsSmoothParam;
 import im.zego.effects.entity.ZegoEffectsTeethWhiteningParam;
 import im.zego.effects.entity.ZegoEffectsWhitenParam;
 import im.zego.effects.entity.ZegoEffectsWrinklesRemovingParam;
+import im.zego.effects.enums.ZegoEffectsScaleMode;
 
 public class AiEffectManager {
     private static AiEffectManager sInstance;
@@ -124,6 +125,21 @@ public class AiEffectManager {
         AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Filter.naturalCreamy, getFilePath(context, AiEffectConstant.Filter.naturalCreamy));
         AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Filter.naturalFresh, getFilePath(context, AiEffectConstant.Filter.naturalFresh));
 
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantAnimal, getFilePath(context, AiEffectConstant.Pendant.pendantAnimal));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantCat, getFilePath(context, AiEffectConstant.Pendant.pendantCat));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantClawMachine, getFilePath(context, AiEffectConstant.Pendant.pendantClawMachine));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantClown, getFilePath(context, AiEffectConstant.Pendant.pendantClown));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantCoolGirl, getFilePath(context, AiEffectConstant.Pendant.pendantCoolGirl));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantDeer, getFilePath(context, AiEffectConstant.Pendant.pendantDeer));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantDive, getFilePath(context, AiEffectConstant.Pendant.pendantDive));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantSailorMoon, getFilePath(context, AiEffectConstant.Pendant.pendantSailorMoon));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.Pendant.pendantWatermelon, getFilePath(context, AiEffectConstant.Pendant.pendantWatermelon));
+
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.BgImage.bgImage_1, getFilePath(context, AiEffectConstant.BgImage.bgImage_1));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.BgImage.bgImage_2, getFilePath(context, AiEffectConstant.BgImage.bgImage_2));
+        AssetsFileUtil.copyFileFromAssets(context, AiEffectConstant.BgImage.bgImage_3, getFilePath(context, AiEffectConstant.BgImage.bgImage_3));
+
+
         ArrayList<String> effectList = new ArrayList<>();
         effectList.add(getFilePath(context, AiEffectConstant.WholeModule.faceDetection));
         effectList.add(getFilePath(context, AiEffectConstant.WholeModule.pendantDetection));
@@ -164,6 +180,18 @@ public class AiEffectManager {
 
     public AiEffectParametersData.MakeupsData getMakeupsData() {
         return makeupsData;
+    }
+
+    public void setBeautyData(AiEffectParametersData.BeautyData beautyData) {
+        this.beautyData = beautyData;
+    }
+
+    public void setSmoothData(AiEffectParametersData.SmoothData smoothData) {
+        this.smoothData = smoothData;
+    }
+
+    public void setMakeupsData(AiEffectParametersData.MakeupsData makeupsData) {
+        this.makeupsData = makeupsData;
     }
 
     public ZegoEffects getEffects() {
@@ -368,5 +396,25 @@ public class AiEffectManager {
         ZegoEffectsFilterParam param = new ZegoEffectsFilterParam();
         param.intensity = progress;
         effects.setFilterParam(param);
+    }
+
+
+    public void setPendantEffect(String fileName) {
+        effects.setPendant(fileName);
+    }
+
+    public void closePendantEffect() {
+        effects.setPendant(null);
+    }
+
+
+    public void setPortraitSegmentation(String imagePath) {
+        effects.setPortraitSegmentationBackgroundPath(imagePath, ZegoEffectsScaleMode.ASPECT_FILL);
+        effects.enablePortraitSegmentation(true);
+
+
+    }
+    public void closeSetPortraitSegmentation() {
+        effects.enablePortraitSegmentation(false);
     }
 }
