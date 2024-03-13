@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
         userId = generateUserID();
         userName = "user_" + userId;
-        roomId = "3526";
+        roomId = "526";
 
         binding.fabEffect.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
         binding.fabStart.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
@@ -147,7 +147,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.clEffect.setOnClickListener(v -> closeAiEffect());
 
         binding.fabStart.setOnClickListener(v -> {
-            setParametersToNextPage();
+//            setParametersToNextPage();
+            binding.ttvLocal.setVisibility(View.GONE);
+            binding.ttvMySelfLocal.setVisibility(View.VISIBLE);
+            binding.ttvMySelfLocal.bringToFront();
+            binding.ttvRemote.setVisibility(View.VISIBLE);
+            startMySelfPreview();
 
         });
     }
@@ -656,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             public void onRoomStreamUpdate(String roomID, ZegoUpdateType updateType, ArrayList<ZegoStream> streamList, JSONObject extendedData) {
                 super.onRoomStreamUpdate(roomID, updateType, streamList, extendedData);
                 if (updateType == ZegoUpdateType.ADD) {
-                    startPlayStream(streamList.get(0).streamID);
+                    startRemotePlayStream(streamList.get(0).streamID);
                 } else {
                     stopPlayStream(streamList.get(0).streamID);
                 }
@@ -684,6 +689,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoExpressEngine.getEngine().loginRoom(roomId, user, roomConfig, (int error, JSONObject extendData) -> {
 
             if (error == 0) {
+                startPreview();
                 startPublishStream();
             }
         });
@@ -709,7 +715,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             @Override
             public void onCapturedUnprocessedTextureData(int textureID, int width, int height, long referenceTimeMillisecond, ZegoPublishChannel channel) {
                 ZegoEffectsVideoFrameParam param = new ZegoEffectsVideoFrameParam();
-                param.format = ZegoEffectsVideoFrameFormat.BGRA32;
+                param.format = ZegoEffectsVideoFrameFormat.RGBA32;
                 param.width = width;
                 param.height = height;
 
@@ -738,13 +744,30 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
     //播放串流
     private void startPlayStream(String streamId) {
-        ZegoCanvas canvas = new ZegoCanvas(binding.ttvLocal);
+        ZegoCanvas canvas = new ZegoCanvas(binding.ttvRemote);
         ZegoExpressEngine.getEngine().startPlayingStream(streamId, canvas);
     }
 
     //停止播放串流
     private void stopPlayStream(String streamId) {
         ZegoExpressEngine.getEngine().stopPlayingStream(streamId);
+    }
+
+    //顯示畫面預覽(自己)(大)
+    private void startPreview() {
+        ZegoCanvas canvas = new ZegoCanvas(binding.ttvLocal);
+        ZegoExpressEngine.getEngine().startPreview(canvas);
+    }
+    //顯示畫面預覽(自己)(小)
+    private void startMySelfPreview() {
+        ZegoCanvas canvas = new ZegoCanvas(binding.ttvMySelfLocal);
+        ZegoExpressEngine.getEngine().startPreview(canvas);
+    }
+
+    //播放串流(遠端用戶)
+    private void startRemotePlayStream(String streamId) {
+        ZegoCanvas canvas = new ZegoCanvas(binding.ttvRemote);
+        ZegoExpressEngine.getEngine().startPlayingStream(streamId, canvas);
     }
 
     @Override
@@ -908,7 +931,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 AiEffectManager.getInstance().faceLiftEffect(progress);
-                AiEffectManager.getInstance().getSmoothData().setFaceLifting(progress);
+                AiEffectManager.getInstance().getSmoothData().setFaceLifting(100);
             }
 
             @Override

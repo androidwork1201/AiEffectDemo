@@ -73,13 +73,11 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
     private String appSign;
     private String userId;
     private String userName;
-    private String roomId = "155515";
+    private String roomId = "1000000";
     private String licenseData;
     private AiEffectParametersData.BeautyData beautyData;
     private AiEffectParametersData.SmoothData smoothData;
     private AiEffectParametersData.MakeupsData makeupsData;
-
-    private ZegoEffects effects;
     private ZegoEngineProfile profile;
 
     private PendantAdapter adapter;
@@ -92,12 +90,12 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.fabSticker.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
-        binding.fabBg.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
+//        binding.fabSticker.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
+//        binding.fabBg.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
 
         getParameters();
-        initFab();
-        setPendant();
+//        initFab();
+//        setPendant();
         binding.ivEnd.setOnClickListener(v -> {
             finish();
         });
@@ -117,71 +115,71 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
     }
 
 
-    private void initFab() {
-        binding.fabSticker.setOnClickListener(v -> {
-            binding.fabSticker.setVisibility(View.GONE);
-            binding.fabBg.setVisibility(View.GONE);
-            binding.rvSticker.setVisibility(View.VISIBLE);
-            setPendant();
-        });
+//    private void initFab() {
+//        binding.fabSticker.setOnClickListener(v -> {
+//            binding.fabSticker.setVisibility(View.GONE);
+//            binding.fabBg.setVisibility(View.GONE);
+//            binding.rvSticker.setVisibility(View.VISIBLE);
+//            setPendant();
+//        });
+//
+//        binding.fabBg.setOnClickListener(v -> {
+//            binding.fabBg.setVisibility(View.GONE);
+//            binding.fabSticker.setVisibility(View.GONE);
+//            binding.rvSticker.setVisibility(View.VISIBLE);
+//            setBg();
+//        });
+//
+//        binding.clEffect.setOnClickListener(v -> {
+//            closePendant();
+//        });
+//    }
 
-        binding.fabBg.setOnClickListener(v -> {
-            binding.fabBg.setVisibility(View.GONE);
-            binding.fabSticker.setVisibility(View.GONE);
-            binding.rvSticker.setVisibility(View.VISIBLE);
-            setBg();
-        });
+//    private void setPendant() {
+//
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        arrayList.add("Animal");
+//        arrayList.add("Cat");
+//        arrayList.add("ClawMachine");
+//        arrayList.add("Clown");
+//        arrayList.add("CoolGirl");
+//        arrayList.add("Deer");
+//        arrayList.add("Dive");
+//        arrayList.add("SailorMoon");
+//        arrayList.add("Watermelon");
+//        arrayList.add("移除掛件");
+//
+//        adapter = new PendantAdapter();
+//        adapter.setOnItemListener(this);
+//        binding.rvSticker.setLayoutManager(new LinearLayoutManager(this));
+//        binding.rvSticker.setHasFixedSize(true);
+//        binding.rvSticker.setAdapter(adapter);
+//        adapter.setData(arrayList);
+//    }
 
-        binding.clEffect.setOnClickListener(v -> {
-            closePendant();
-        });
-    }
-
-    private void setPendant() {
-
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("Animal");
-        arrayList.add("Cat");
-        arrayList.add("ClawMachine");
-        arrayList.add("Clown");
-        arrayList.add("CoolGirl");
-        arrayList.add("Deer");
-        arrayList.add("Dive");
-        arrayList.add("SailorMoon");
-        arrayList.add("Watermelon");
-        arrayList.add("移除掛件");
-
-        adapter = new PendantAdapter();
-        adapter.setOnItemListener(this);
-        binding.rvSticker.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvSticker.setHasFixedSize(true);
-        binding.rvSticker.setAdapter(adapter);
-        adapter.setData(arrayList);
-    }
-
-    private void setBg() {
-
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("背景1");
-        arrayList.add("背景2");
-        arrayList.add("背景3");
-        arrayList.add("移除背景效果");
-
-
-        adapter = new PendantAdapter();
-        adapter.setOnItemListener(this);
-        binding.rvSticker.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvSticker.setHasFixedSize(true);
-        binding.rvSticker.setAdapter(adapter);
-        adapter.setData(arrayList);
-    }
-
-    private void closePendant() {
-        binding.fabSticker.setVisibility(View.VISIBLE);
-        binding.fabBg.setVisibility(View.VISIBLE);
-        binding.rvSticker.setVisibility(View.GONE);
-        isOpen = !isOpen;
-    }
+//    private void setBg() {
+//
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        arrayList.add("背景1");
+//        arrayList.add("背景2");
+//        arrayList.add("背景3");
+//        arrayList.add("移除背景效果");
+//
+//
+//        adapter = new PendantAdapter();
+//        adapter.setOnItemListener(this);
+//        binding.rvSticker.setLayoutManager(new LinearLayoutManager(this));
+//        binding.rvSticker.setHasFixedSize(true);
+//        binding.rvSticker.setAdapter(adapter);
+//        adapter.setData(arrayList);
+//    }
+//
+//    private void closePendant() {
+//        binding.fabSticker.setVisibility(View.VISIBLE);
+//        binding.fabBg.setVisibility(View.VISIBLE);
+//        binding.rvSticker.setVisibility(View.GONE);
+//        isOpen = !isOpen;
+//    }
 
 
     private void getParameters() {
@@ -192,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
                 appSign = bundle.getString("appSign");
                 userId = bundle.getString("userId");
                 userName = bundle.getString("userName");
-//                roomId = bundle.getString("roomId");
+                roomId = bundle.getString("roomId");
                 licenseData = bundle.getString("licenseData");
 
                 beautyData = new Gson().fromJson(bundle.getString("beautyData"), AiEffectParametersData.BeautyData.class);
@@ -200,9 +198,9 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
                 makeupsData = new Gson().fromJson(bundle.getString("makeupsData"), AiEffectParametersData.MakeupsData.class);
 
                 AiEffectManager.getInstance().initAiEffect(this, licenseData);
-//                AiEffectManager.getInstance().setBeautyData(beautyData);
-//                AiEffectManager.getInstance().setSmoothData(smoothData);
-//                AiEffectManager.getInstance().setMakeupsData(makeupsData);
+                AiEffectManager.getInstance().setBeautyData(beautyData);
+                AiEffectManager.getInstance().setSmoothData(smoothData);
+                AiEffectManager.getInstance().setMakeupsData(makeupsData);
 
                 createEngine();
                 initVideoProcess();
@@ -247,7 +245,7 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
             @Override
             public void onCapturedUnprocessedTextureData(int textureID, int width, int height, long referenceTimeMillisecond, ZegoPublishChannel channel) {
                 ZegoEffectsVideoFrameParam param = new ZegoEffectsVideoFrameParam();
-                param.format = ZegoEffectsVideoFrameFormat.BGRA32;
+                param.format = ZegoEffectsVideoFrameFormat.RGBA32;
                 param.width = width;
                 param.height = height;
 
@@ -390,6 +388,6 @@ public class HomeActivity extends AppCompatActivity implements PendantAdapter.On
             default:
                 break;
         }
-        closePendant();
+//        closePendant();
     }
 }

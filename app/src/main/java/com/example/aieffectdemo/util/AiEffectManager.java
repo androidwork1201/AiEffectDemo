@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import im.zego.effects.ZegoEffects;
 import im.zego.effects.entity.ZegoEffectsBigEyesParam;
+import im.zego.effects.entity.ZegoEffectsBlurParam;
 import im.zego.effects.entity.ZegoEffectsBlusherParam;
 import im.zego.effects.entity.ZegoEffectsCheekboneSlimmingParam;
 import im.zego.effects.entity.ZegoEffectsColoredcontactsParam;
@@ -412,9 +413,9 @@ public class AiEffectManager {
         effects.setPortraitSegmentationBackgroundPath(imagePath, ZegoEffectsScaleMode.ASPECT_FILL);
         effects.enablePortraitSegmentation(true);
 
-
     }
     public void closeSetPortraitSegmentation() {
+        effects.setPortraitSegmentationBackgroundPath(null, ZegoEffectsScaleMode.ASPECT_FILL);
         effects.enablePortraitSegmentation(false);
     }
 }
