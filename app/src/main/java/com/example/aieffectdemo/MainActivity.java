@@ -149,13 +149,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.clEffect.setOnClickListener(v -> closeAiEffect());
 
         binding.fabStart.setOnClickListener(v -> {
-
             binding.ttvLocal.setVisibility(View.GONE);
+            binding.ttvCallingLocal.setVisibility(View.VISIBLE);
+
             binding.ivEnd.setVisibility(View.VISIBLE);
-            binding.llNav.setVisibility(View.GONE);
+            binding.fabEffect.setAlpha(0.0f);
+            binding.fabStart.setAlpha(0.0f);
             binding.tvCallingHint.setVisibility(View.VISIBLE);
             loginRoom();
-
         });
     }
 
@@ -223,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 initVideoProcess();
                 startListenerEvent();
 //                loginRoom();
+
             }
         });
     }
@@ -649,6 +651,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 if (updateType == ZegoUpdateType.ADD) {
                     binding.tvCallingHint.setVisibility(View.GONE);
                     binding.ttvRemote.setVisibility(View.VISIBLE);
+                    startMySelfPreview();
                     startRemotePlayStream(streamList.get(0).streamID);
                 } else {
                     stopPlayStream(streamList.get(0).streamID);
@@ -679,10 +682,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoExpressEngine.getEngine().loginRoom(roomId, user, roomConfig, (int error, JSONObject extendData) -> {
 
             if (error == 0) {
-                startMySelfPreview();
                 startPublishStream();
-                binding.ttvCallingLocal.setVisibility(View.VISIBLE);
-                binding.ttvCallingLocal.bringToFront();
             }
         });
     }
