@@ -23,6 +23,7 @@ import com.example.aieffectdemo.adapter.BottomNavAdapter;
 import com.example.aieffectdemo.adapter.SubBottomNavAdapter;
 import com.example.aieffectdemo.data.AiEffectParametersData;
 import com.example.aieffectdemo.databinding.ActivityMainBinding;
+import com.example.aieffectdemo.dialog.MarketingTeamIsAllMentallyRetardedDialog;
 import com.example.aieffectdemo.util.AiEffectConstant;
 import com.example.aieffectdemo.util.AiEffectManager;
 import com.example.aieffectdemo.util.AssetsFileUtil;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         binding.clEffect.setOnClickListener(v -> closeAiEffect());
 
         binding.fabStart.setOnClickListener(v -> {
+            binding.llInfo.setVisibility(View.GONE);
             binding.ttvLocal.setVisibility(View.GONE);
             binding.ttvCallingLocal.setVisibility(View.VISIBLE);
 
@@ -157,6 +159,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             binding.fabStart.setAlpha(0.0f);
             binding.tvCallingHint.setVisibility(View.VISIBLE);
             loginRoom();
+        });
+
+        binding.llInfo.setOnClickListener(v -> {
+            MarketingTeamIsAllMentallyRetardedDialog dialog =
+                    MarketingTeamIsAllMentallyRetardedDialog.newInstance(this);
+            dialog.show();
         });
     }
 
@@ -918,7 +926,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 AiEffectManager.getInstance().faceLiftEffect(progress);
-                AiEffectManager.getInstance().getSmoothData().setFaceLifting(100);
+                AiEffectManager.getInstance().getSmoothData().setFaceLifting(progress);
             }
 
             @Override

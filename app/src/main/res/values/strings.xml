@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">濾鏡Demo</string>
+    <string name="text_retard_0_title">操作方法</string>
+    <string name="text_retard_1_hint">按下\""設定濾鏡\""開始設定濾鏡</string>
+    <string name="text_retard_2_hint">按下\""開始通話\""開始和對方進行通話</string>
 </resources>

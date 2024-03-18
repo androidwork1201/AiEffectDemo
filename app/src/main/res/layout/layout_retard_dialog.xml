@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="@drawable/shape_dialog_bg">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:text="@string/text_retard_0_title"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textSize="16sp"
+        android:text="@string/text_retard_1_hint"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSecond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/text_retard_2_hint"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="關閉"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"/>
+    </FrameLayout>
+
+</LinearLayout>
