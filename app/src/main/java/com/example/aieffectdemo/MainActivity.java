@@ -110,24 +110,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setContentView(binding.getRoot());
 
+
         userId = generateUserID();
         userName = "user_" + userId;
         roomId = "526";
 
-        binding.fabEffect.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
-        binding.fabStart.getDrawable().setTint(ContextCompat.getColor(this, R.color.white));
-
-        checkPermission();
-        textHintAnim();
         initFab();
         initBottomNav();
         initSubBottomNav();
+        checkPermission();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (isBackAgain) finish();
+        binding.ivEnd.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -139,20 +137,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
     private void initFab() {
         binding.fabEffect.setOnClickListener(v -> {
+
+            binding.ttvLocal.setVisibility(View.VISIBLE);
             binding.llEffect.setVisibility(View.VISIBLE);
             binding.fabEffect.setVisibility(View.GONE);
             binding.fabStart.setVisibility(View.GONE);
+            startPreview();
+
         });
 
         binding.clEffect.setOnClickListener(v -> closeAiEffect());
 
         binding.fabStart.setOnClickListener(v -> {
-//            setParametersToNextPage();
+
             binding.ttvLocal.setVisibility(View.GONE);
-            binding.ttvMySelfLocal.setVisibility(View.VISIBLE);
-            binding.ttvMySelfLocal.bringToFront();
-            binding.ttvRemote.setVisibility(View.VISIBLE);
-            startMySelfPreview();
+            binding.ivEnd.setVisibility(View.VISIBLE);
+            binding.llNav.setVisibility(View.GONE);
+            binding.tvCallingHint.setVisibility(View.VISIBLE);
+            loginRoom();
 
         });
     }
@@ -216,13 +218,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
 
             if (licenseData != null) {
                 AiEffectManager.getInstance().initAiEffect(this, licenseData);
+
                 createEngine();
                 initVideoProcess();
                 startListenerEvent();
-                loginRoom();
+//                loginRoom();
             }
         });
     }
+
 
     @Override
     public void onItem(int position) {
@@ -304,135 +308,135 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         switch (itemName) {
             case "美白": {
                 adjustmentFaceWhiten();
-                AiEffectManager.getInstance().faceWhiten(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().faceWhiten(AiEffectManager.getInstance().getBeautyData().getWhiten());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getWhiten());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "磨皮": {
                 adjustmentSmoothFace();
-                AiEffectManager.getInstance().smoothFace(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().smoothFace(AiEffectManager.getInstance().getBeautyData().getSmooth());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getSmooth());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "紅潤": {
                 adjustmentRosy();
-                AiEffectManager.getInstance().rosyEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().rosyEffect(AiEffectManager.getInstance().getBeautyData().getRosy());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getRosy());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "銳化": {
                 adjustmentSharpen();
-                AiEffectManager.getInstance().sharpenEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().sharpenEffect(AiEffectManager.getInstance().getBeautyData().getSharpen());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getSharpen());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "去除法令紋": {
                 adjustmentWrinkles();
-                AiEffectManager.getInstance().wrinklesEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().wrinklesEffect(AiEffectManager.getInstance().getBeautyData().getWrinkles());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getWrinkles());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "去除黑眼圈": {
                 adjustmentDarkCircles();
-                AiEffectManager.getInstance().darkCirclesEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().darkCirclesEffect(AiEffectManager.getInstance().getBeautyData().getDarkCircles());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getBeautyData().getDarkCircles());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
 
             case "大眼": {
                 adjustmentBigEye();
-                AiEffectManager.getInstance().bigEyeEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().bigEyeEffect(AiEffectManager.getInstance().getSmoothData().getBigEyes());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getBigEyes());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦臉": {
                 adjustmentFaceLift();
-                AiEffectManager.getInstance().faceLiftEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().faceLiftEffect(AiEffectManager.getInstance().getSmoothData().getFaceLifting());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getFaceLifting());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "小嘴": {
                 adjustmentSmailMouth();
-                AiEffectManager.getInstance().smailMouthEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().smailMouthEffect(AiEffectManager.getInstance().getSmoothData().getSmallMouth());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getSmallMouth());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "亮眼": {
                 adjustmentEyesBrightening();
-                AiEffectManager.getInstance().eyesBrighteningEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().eyesBrighteningEffect(AiEffectManager.getInstance().getSmoothData().getEyesBrightening());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getEyesBrightening());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦鼻": {
                 adjustmentNoseNarrowing();
-                AiEffectManager.getInstance().noseNarrowingEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().noseNarrowingEffect(AiEffectManager.getInstance().getSmoothData().getNoseNarrowing());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getNoseNarrowing());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "白牙": {
                 adjustmentTeethWhitening();
-                AiEffectManager.getInstance().teethWhiteningEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().teethWhiteningEffect(AiEffectManager.getInstance().getSmoothData().getTeethWhitening());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getTeethWhitening());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "長下巴": {
                 adjustmentLongChin();
-                AiEffectManager.getInstance().longChinEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().longChinEffect(AiEffectManager.getInstance().getSmoothData().getLongChin());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getLongChin());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "缩小额頭高度": {
                 adjustmentForeheadShortening();
-                AiEffectManager.getInstance().foreheadShorteningEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().foreheadShorteningEffect(AiEffectManager.getInstance().getSmoothData().getForeheadShortening());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getForeheadShortening());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦下額骨": {
                 adjustMandibleSlimming();
-                AiEffectManager.getInstance().mandibleSlimmingEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().mandibleSlimmingEffect(AiEffectManager.getInstance().getSmoothData().getMandibleSlimming());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getMandibleSlimming());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "瘦颧骨": {
                 adjustmentCheekboneSlimming();
-                AiEffectManager.getInstance().cheekboneSlimmingEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().cheekboneSlimmingEffect(AiEffectManager.getInstance().getSmoothData().getCheekboneSlimming());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getCheekboneSlimming());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "小臉": {
                 adjustmentFaceShortening();
-                AiEffectManager.getInstance().faceShorteningEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().faceShorteningEffect(AiEffectManager.getInstance().getSmoothData().getFaceShortening());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getFaceShortening());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "長鼻": {
                 adjustmentNoseLengthening();
-                AiEffectManager.getInstance().noseLengtheningEffect(0);
-                binding.sbAttributesAdjust.setProgress(0);
+                AiEffectManager.getInstance().noseLengtheningEffect(AiEffectManager.getInstance().getSmoothData().getNoseLengthening());
+                binding.sbAttributesAdjust.setProgress(AiEffectManager.getInstance().getSmoothData().getNoseLengthening());
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 break;
             }
             case "眼線": {
                 eyeLineType();
                 adjustmentEyeLine();
-                AiEffectManager.getInstance().eyeLineEffect(0, eyeLineResPath);
+                AiEffectManager.getInstance().eyeLineEffect(AiEffectManager.getInstance().getMakeupsData().getEyeliner(), eyeLineResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -445,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼影": {
                 eyeShadowType();
                 adjustmentEyeShadow();
-                AiEffectManager.getInstance().eyeShadowEffect(0, eyeShadowResPath);
+                AiEffectManager.getInstance().eyeShadowEffect(AiEffectManager.getInstance().getMakeupsData().getEyeShadow(), eyeShadowResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("粉霧海");
@@ -458,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "眼睫毛": {
                 eyeLashesType();
                 adjustmentEyeLashes();
-                AiEffectManager.getInstance().eyeLashesEffect(0, eyeLashesResPath);
+                AiEffectManager.getInstance().eyeLashesEffect(AiEffectManager.getInstance().getMakeupsData().getEyelashes(), eyeLashesResPath);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("自然");
@@ -471,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "腮紅": {
                 blusherType();
                 adjustmentBlusher();
-                AiEffectManager.getInstance().blusherEffect(0, blusherResPath);
+                AiEffectManager.getInstance().blusherEffect(AiEffectManager.getInstance().getMakeupsData().getBlush(), blusherResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("微醺");
@@ -484,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "口紅": {
                 lipStickType();
                 adjustmentLipStick();
-                AiEffectManager.getInstance().lipStickEffect(0, lipStickResPath);
+                AiEffectManager.getInstance().lipStickEffect(AiEffectManager.getInstance().getMakeupsData().getLipstick(), lipStickResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("豆沙粉");
@@ -497,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             case "美瞳": {
                 coloredContactsType();
                 adjustmentColoredContacts();
-                AiEffectManager.getInstance().coloredContactsEffect(0, coloredContactsResPath);
+                AiEffectManager.getInstance().coloredContactsEffect(AiEffectManager.getInstance().getMakeupsData().getLenses(), coloredContactsResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("水光黑");
@@ -508,15 +512,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
                 break;
             }
             case "風格妝": {
-                binding.tvEffectHint.setVisibility(View.VISIBLE);
-                binding.tvEffectHint.setAlpha(1.0f);
-                binding.tvEffectHint.setText("風格妝無法與\n眼線、眼影、眼睫毛、腮红、口红、美瞳一起套用");
-                binding.tvEffectHint.bringToFront();
-                textHintAnim();
-
                 makeupType();
                 adjustmentMakeup();
-                AiEffectManager.getInstance().makeupEffect(0, makeupResPath);
+                AiEffectManager.getInstance().makeupEffect(AiEffectManager.getInstance().getMakeupsData().getStyleMakeup(), makeupResPath);
                 binding.clAttributesAdjust.setVisibility(View.VISIBLE);
                 binding.clMakeupsAdjust.setVisibility(View.VISIBLE);
                 binding.rbFirstType.setText("眼瞼下至妝");
@@ -577,18 +575,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         }
     }
 
-    private void textHintAnim() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(binding.tvEffectHint, View.ALPHA, 1.0f, 0.0f);
-        objectAnimator.setDuration(3000);
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                binding.tvEffectHint.setVisibility(View.GONE);
-            }
-        });
-        objectAnimator.start();
-    }
 
     /**
      * 隨機產生UserID
@@ -661,9 +647,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             public void onRoomStreamUpdate(String roomID, ZegoUpdateType updateType, ArrayList<ZegoStream> streamList, JSONObject extendedData) {
                 super.onRoomStreamUpdate(roomID, updateType, streamList, extendedData);
                 if (updateType == ZegoUpdateType.ADD) {
+                    binding.tvCallingHint.setVisibility(View.GONE);
+                    binding.ttvRemote.setVisibility(View.VISIBLE);
                     startRemotePlayStream(streamList.get(0).streamID);
                 } else {
                     stopPlayStream(streamList.get(0).streamID);
+                    Toast.makeText(MainActivity.this, "通話結束", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
@@ -689,8 +679,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoExpressEngine.getEngine().loginRoom(roomId, user, roomConfig, (int error, JSONObject extendData) -> {
 
             if (error == 0) {
-                startPreview();
+                startMySelfPreview();
                 startPublishStream();
+                binding.ttvCallingLocal.setVisibility(View.VISIBLE);
+                binding.ttvCallingLocal.bringToFront();
             }
         });
     }
@@ -742,12 +734,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
         ZegoExpressEngine.getEngine().stopPublishingStream();
     }
 
-    //播放串流
-    private void startPlayStream(String streamId) {
-        ZegoCanvas canvas = new ZegoCanvas(binding.ttvRemote);
-        ZegoExpressEngine.getEngine().startPlayingStream(streamId, canvas);
-    }
-
     //停止播放串流
     private void stopPlayStream(String streamId) {
         ZegoExpressEngine.getEngine().stopPlayingStream(streamId);
@@ -757,10 +743,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
     private void startPreview() {
         ZegoCanvas canvas = new ZegoCanvas(binding.ttvLocal);
         ZegoExpressEngine.getEngine().startPreview(canvas);
+
     }
+
     //顯示畫面預覽(自己)(小)
     private void startMySelfPreview() {
-        ZegoCanvas canvas = new ZegoCanvas(binding.ttvMySelfLocal);
+        ZegoCanvas canvas = new ZegoCanvas(binding.ttvCallingLocal);
         ZegoExpressEngine.getEngine().startPreview(canvas);
     }
 
@@ -781,7 +769,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavAdapter.
             }
         }
     }
-
 
 
     //----------------------------------------------美顏-------------------------------------------------

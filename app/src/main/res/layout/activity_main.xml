@@ -9,39 +9,31 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvEffectHint"
+        android:id="@+id/tvCallingHint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="視訊前先來打扮一下自己吧"
+        android:layout_height="match_parent"
         android:textAlignment="center"
-        android:textSize="16sp"
-        android:padding="5dp"
-        android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:text="等待對方加入中‧‧‧"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextureView
         android:id="@+id/ttvLocal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextureView
-        android:id="@+id/ttvMySelfLocal"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
 
     <TextureView
         android:id="@+id/ttvRemote"
@@ -53,24 +45,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+    <TextureView
+        android:id="@+id/ttvCallingLocal"
+        android:layout_width="150dp"
+        android:layout_height="250dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/llNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:animateLayoutChanges="true"
         android:gravity="end"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,25 +67,30 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fabEffect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/baseline_face_retouching_natural_24"
-            app:maxImageSize="36dp" />
+            android:layout_marginEnd="20dp"
+            android:background="@color/white"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="濾鏡"
+            android:textStyle="bold"
+            android:textColor="#FF0000"
+            android:textSize="22sp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fabStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/baseline_local_phone_24"
-            app:maxImageSize="36dp" />
+            android:layout_marginEnd="20dp"
+            android:background="@color/white"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="開始通話"
+            android:textSize="22sp"/>
+
 
         <LinearLayout
             android:id="@+id/llEffect"
@@ -137,8 +131,8 @@
                     android:id="@+id/rgMakeup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -150,7 +144,7 @@
                         android:id="@+id/rbFirstType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"/>
+                        android:checked="true" />
 
                     <RadioButton
                         android:id="@+id/rbSecondType"
@@ -215,6 +209,7 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             android:src="@drawable/baseline_tag_faces_24"
+            android:visibility="gone"
             app:maxImageSize="36dp" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -225,6 +220,20 @@
             android:visibility="gone"/>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/shape_end"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:visibility="gone"
+        android:src="@drawable/baseline_call_end_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
